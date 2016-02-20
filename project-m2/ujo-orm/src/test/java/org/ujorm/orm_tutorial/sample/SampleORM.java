@@ -50,8 +50,8 @@ import static org.ujorm.orm.template.AliasTable.Build.*;
  * and show how to use a meta-model.
  *
  * Entities: <pre>
- *  - Order [ID, NOTE, CREATED, ...]
- *  - Item [ID, ORDER, NOTE, ...]
+ * - Order [ID, NOTE, CREATED, ...]
+ * - Item [ID, ORDER, NOTE, ...]
  * </pre>
 
  * Copyright 2011, Pavel Ponec
@@ -244,7 +244,7 @@ public class SampleORM {
         }
     }
 
-    /** Lern how to use the Criterion as an simple object validator only. */
+    /** Learn how to use the Criterion as an simple object validator only. */
     public void useCriterions() {
 
         final Order order = new Order();
@@ -271,6 +271,8 @@ public class SampleORM {
 
         // Another condition: (Order.CREATED<=now() or Order.NOTE='another') and Order.ID>99
         crn = (crnCreated.or(crnNote)).and(crnId);
+        assert crn.evaluate(order);
+
         // ... or simple by a native priority:
         crn = crnCreated.or(crnNote).and(crnId);
         assert crn.evaluate(order);
@@ -499,7 +501,6 @@ public class SampleORM {
         for (Item item : session.createQuery(crn)) {
             logInfo("Item: %s", item);
         }
-
     }
 
     /** Select one items without Order */
