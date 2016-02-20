@@ -387,7 +387,7 @@ public class SampleORM {
         final AliasTable item = handler.tableOf(Item.class, "i");
 
         String expected = "SELECT o.ID"
-                + ", COUNT(*) AS ITEM_COUNT"
+                + ", COUNT(*) AS item_count"
                 + " FROM db1.ord_order o"
                 + " INNER JOIN db1.ord_item i ON i.fk_order = o.ID "
                 + " WHERE o.ID!=?"
