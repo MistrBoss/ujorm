@@ -109,7 +109,7 @@ public class ListDataProvider<U extends Ujo> extends AbstractDataProvider<U> {
         return filteredRows;
     }
 
-    /** Build a JDBC ResultSet allways.
+    /** Build a JDBC ResultSet always.
      * Overwrite the method for an optimization.<br>
      */
     @Override
@@ -129,13 +129,18 @@ public class ListDataProvider<U extends Ujo> extends AbstractDataProvider<U> {
 
         // Sort:
         if (sortRequest) {
-            UjoComparator.of(getSortKey()).sort(rows);
+            sortRows(rows);
         }
 
         // The sublist:
         final int last = (int) Math.min(first + count, rows.size());
         final int frst = (int) Math.min(first, last);
         return UjoIterator.of(rows.subList(frst, last));
+    }
+
+    /** Sort the rows */
+    protected void sortRows(final List<U> rows) {
+        UjoComparator.of(getSortKeys()).sort(rows);
     }
 
     /** Method calculate the size of filtered rows */
@@ -156,7 +161,7 @@ public class ListDataProvider<U extends Ujo> extends AbstractDataProvider<U> {
         clearBuffer();
     }
 
-    /** Clear a filterd rows and size */
+    /** Clear a filter rows and size */
     protected void clearBuffer() {
         this.filteredRows = null;
         this.size = null;
@@ -191,9 +196,9 @@ public class ListDataProvider<U extends Ujo> extends AbstractDataProvider<U> {
         return result;
     }
 
-    /** Update all rows with a codition using the row
+    /** Update all rows with a condition using the row
      * @param updateCondition Update condition
-     * @param row Updated row
+     * @param updatedRow Updated row
      */
     @Override
     public long updateRow(@Nonnull final Criterion<? super U> updateCondition, @Nonnull final U updatedRow) {

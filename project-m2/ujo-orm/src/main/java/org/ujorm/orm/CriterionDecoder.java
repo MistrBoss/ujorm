@@ -34,6 +34,7 @@ import org.ujorm.orm.metaModel.MetaDatabase;
 import org.ujorm.orm.metaModel.MetaParams;
 import org.ujorm.orm.metaModel.MetaTable;
 import org.ujorm.orm.metaModel.MoreParams;
+import static org.ujorm.core.UjoTools.SPACE;
 
 /**
  * SQL Criterion Decoder.
@@ -118,15 +119,15 @@ public class CriterionDecoder {
                 or = true;
             case AND:
                 if (or) sql.append(" (");
-                unpack(eb.getLeftNode(), sql);
-                sql.append(" ");
+                unpack(eb.getLeftNode());
+                sql.append(SPACE);
                 sql.append(eb.getOperator().name());
-                sql.append(" ");
-                unpack(eb.getRightNode(), sql);
+                sql.append(SPACE);
+                unpack(eb.getRightNode());
                 if (or) sql.append(") ");
                 break;
             case NOT:
-                sql.append(" ");
+                sql.append(SPACE);
                 sql.append(eb.getOperator().name());
                 sql.append(" (");
                 unpack(eb.getRightNode(), sql); // same criterion in both nodes

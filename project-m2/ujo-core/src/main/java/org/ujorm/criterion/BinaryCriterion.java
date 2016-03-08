@@ -18,6 +18,7 @@
 package org.ujorm.criterion;
 
 import org.ujorm.Ujo;
+import static org.ujorm.core.UjoTools.SPACE;
 
 /**
  * The BinaryCriterion implementation allows to join two another Criterions into the binary tree.
@@ -92,7 +93,7 @@ public class BinaryCriterion<UJO extends Ujo> extends Criterion<UJO> {
         boolean parentheses = operator!=BinaryOperator.AND;
         if (parentheses) result.append('(');
         result.append(crn1);
-        result.append(' ').append(operator.name()).append(' ');
+        result.append(SPACE).append(operator.name()).append(SPACE);
         result.append(crn2);
         if (parentheses) result.append(')');
 

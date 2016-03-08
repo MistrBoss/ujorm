@@ -29,11 +29,11 @@ import org.ujorm.Ujo;
  * <ul>
  *    <li>like a generic UJO object validator (2)</li>
  *    <li>to create a query on the UJO list (1)</li>
- *    <li>the class is used to build 'SQL query' in the module </strong>ujo-orm</strong> (sience 0.90)</li>
+ *    <li>the class is used to build 'SQL query' in the module </strong>ujo-orm</strong> (since 0.90)</li>
  * </ul>
  *
  * There is allowed to join two instances (based on the same BO) to a binary tree by a new Criterion.
- * Some common operators (and, or, not) are implemeted into a special join method of the Criteron class.
+ * Some common operators (and, or, not) are implemented into a special join method of the Criterion class.
  *
  * <h3>Example of use</h3>
  * <pre class="pre"><span class="comment">// Make a criterion:</span>
@@ -178,7 +178,7 @@ public abstract class Criterion<U extends Ujo> implements Serializable {
         return (Criterion<T>) this;
     }
 
-    /** Print the Criteron including the main domain name along the example: Order(id EQ 1)  */
+    /** Print the Criterion including the main domain name along the example: Order(id EQ 1)  */
     public String toStringFull() {
         final Class domain = getDomain();
         return domain.getSimpleName() + this;
@@ -424,7 +424,7 @@ public abstract class Criterion<U extends Ujo> implements Serializable {
             );
     }
 
-    /** This is a special constant criterion independed on the key or the ujo entity. A result is the same like the parameter constant allways.
+    /** This is a special constant criterion independed on the key or the ujo entity. A result is the same like the parameter constant always.
      * @param key The parameter is required by Ujorm to location a basic database table and the join relations in case a composed Property
      * @see Operator#XFIXED
      */
@@ -464,7 +464,7 @@ public abstract class Criterion<U extends Ujo> implements Serializable {
      * @param key The parameter is required by Ujorm to location a basic database table and the join relations in case a composed Property
      * @param sqlTemplate a SQL condition in the String format, the NULL value or empty string is not accepted
      * A substring {@code {0}} will be replaced for the current column name;
-     * @param value a codition value
+     * @param value a condition value
      * A substring {@code {1}} will be replaced for the current column name;
      * @see Operator#XSQL
      */
@@ -485,7 +485,7 @@ public abstract class Criterion<U extends Ujo> implements Serializable {
      * @param key The parameter is required by Ujorm to location a basic database table and the join relations in case a composed Property
      * @param sqlTemplate a SQL condition in the String format, the NULL value or empty string is not accepted
      * A substring {@code {0}} will be replaced for the current column name;
-     * @param value a codition value, array, list or an another key
+     * @param value a condition value, array, list or an another key
      * A substring {@code {1}} will be replaced for the current column name;
      * @see Operator#XSQL
      */

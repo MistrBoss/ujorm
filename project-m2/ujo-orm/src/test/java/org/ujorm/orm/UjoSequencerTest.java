@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Pavel Ponec.
+ * Copyright 2013-2016 Pavel Ponec.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,16 +31,6 @@ public class UjoSequencerTest extends TestCase {
 
     public UjoSequencerTest(String testName) {
         super(testName);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
     }
 
     /**
@@ -109,7 +99,7 @@ public class UjoSequencerTest extends TestCase {
                 , orderEnd.getId().longValue());
     }
 
-    /** Create and Save Order to databaze */
+    /** Create and Save Order to database */
     private Order createAndSaveOrder(Session session) {
         final Order result = new Order();
         result.setNote("test");
@@ -144,6 +134,4 @@ public class UjoSequencerTest extends TestCase {
 
         return result;
     }
-
-
 }

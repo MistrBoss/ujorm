@@ -37,6 +37,7 @@ import org.ujorm.orm.metaModel.MetaColumn;
 import org.ujorm.orm.metaModel.MetaRelation2Many;
 import org.ujorm.orm.metaModel.MetaTable;
 import org.ujorm.orm.utility.OrmTools;
+import static org.ujorm.core.UjoTools.SPACE;
 
 /**
  * ORM query.
@@ -176,8 +177,8 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
 
     /** Set a new Criterion. There is recommended
      * @param criterion The value NULL is allowed because the value is replaced internally to expression <code>Criterion.where(true)</code>.
-     *                  A MetaTable parameter must be specified in the constuctor for this case.
-     * @see Session#createQuery(org.ujorm.criterion.Criterion) createQuery(Criteron)
+     *                  A MetaTable parameter must be specified in the constructor for this case.
+     * @see Session#createQuery(org.ujorm.criterion.Criterion) createQuery(Criterion)
      * @see #addCriterion(org.ujorm.criterion.Criterion) addCriterion(..)
      **/
     public Query<UJO> setCriterion(Criterion<UJO> criterion) {
@@ -194,7 +195,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
         return criterion;
     }
 
-    /** Method builds and retuns a criterion decoder.
+    /** Method builds and returns a criterion decoder.
      * The new decoder is cached to a next order by change.
      */
     @SuppressWarnings("unchecked")
@@ -319,7 +320,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
      * recursively until optional depth.
      *
      * <br>Performance note: all lazy values are loaded using the one more SQL statement per one relation Key.
-     * The method can consume a lot of memory in dependence on the database row count and content of the Criteron.
+     * The method can consume a lot of memory in dependence on the database row count and content of the Criterion.
      *
      * @param depth The object resursion depth where value 0 means: do not any lazy loading.
      * level. The current release supports only values: 0 and 1.
@@ -461,7 +462,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
    /** Set an list of required columns to reading from database table.
     * Other columns (out of the list) will return a default value, no exception will be throwed.
     * @param addPrimaryKey If the column list does not contains a primary key then the one can be included.
-    * @param columns A Key list including a compositer one to database select. The method does not check collumn duplicities.
+    * @param columns A Key list including a compositer one to database select. The method does not check column duplicities.
     * @see #setColumn(org.ujorm.Key) setColumn(Property)
     * @see #addColumn(org.ujorm.Key) addColumn(Property)
     */
@@ -474,7 +475,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
     * Other columns (out of the list) will return a default value, no exception will be throwed.
     * <br/>WARNING 1: the parameters are not type checked in compile time, use setColumn(..) and addColumn() for this feature.
     * <br/>WARNING 2: assigning an column from a view is forbidden.
-    * @param columns A Key list including a compositer one to database select. The method does not check collumn duplicities.
+    * @param columns A Key list including a compositer one to database select. The method does not check column duplicities.
     * @see #setColumn(org.ujorm.Key) setColumn(Property)
     * @see #addColumn(org.ujorm.Key) addColumn(Property)
     */
@@ -489,12 +490,12 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
     * <br/>WARNING 1: the parameters are not type checked in compile time, use setColumn(..) and addColumn() for this feature.
     * <br/>WARNING 2: assigning an column from a view is forbidden.
     * @param addPrimaryKey If the column list doesn't contain a primary key of the base Entity then the one will be included.
-    * @param addChilds Add all childs of the all <strong>foreign keys</strong>.
-    * @param columns A Key list including a compositer one to database select. The method does not check collumn duplicities.
+    * @param addChilds Add all children of the all <strong>foreign keys</strong>.
+    * @param columns A Key list including a compositer one to database select. The method does not check column duplicities.
     * @see #setColumn(org.ujorm.Key) setColumn(Property)
     * @see #addColumn(org.ujorm.Key) addColumn(Property)
     */
-    public final Query<UJO> setColumns(boolean addPrimaryKey, boolean addChilds, Key... columns) throws IllegalArgumentException {
+    public final Query<UJO> setColumns(boolean addPrimaryKey, boolean addChilds, Key<UJO,?>... columns) throws IllegalArgumentException {
         clearDecoder();
         if (columns.length > 1) {
             // There is strongly preferred to sort the keys from direct to the relations (along a count of the relations in the key) due
@@ -519,7 +520,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
 
     /** Add a missing column. The method is for an internal use.
      * @param column Add the column for case it is missing in the column list
-     * @param addChilds Add all childs of the <strong>foreign key</strong>.
+     * @param addChilds Add all children of the <strong>foreign key</strong>.
      * @param checkDuplicities Check a duplicity column
      */
     protected void addMissingColumn(final ColumnWrapper column, final boolean addChilds, final boolean checkDuplicities) {
@@ -549,7 +550,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
     }
 
     /** Only direct keys are supported */
-    private Key getLastProperty(Key p) {
+    private Key getLastProperty(Key<UJO,?> p) {
         return p.isComposite()
             ? ((CompositeKey)p).getLastKey()
             : p ;
@@ -561,13 +562,22 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
     * @see #addOrderBy(org.ujorm.Key)
     */
     @SuppressWarnings("unchecked")
-    public Query<UJO> orderBy(Collection<Key> orderItems) {
+    public Query<UJO> orderBy(Collection<Key<UJO,?>> orderItems) {
         clearDecoder();
         if (orderItems==null) {
             return orderByMany(); // empty sorting
         } else {
             this.orderBy.clear();
             this.orderBy.addAll( (Collection)orderItems );
+        }
+        return this;
+    }
+
+    /** Add an item to the end of order list. */
+    public Query<UJO> addOrderBy(final Key<UJO,?> ... keys) {
+        clearDecoder();
+        for (Key<UJO, ?> key : keys) {
+           orderBy.add(key);
         }
         return this;
     }
@@ -749,7 +759,7 @@ public class Query<UJO extends OrmUjo> implements Iterable<UJO> {
             result.append(" | ordered by: ");
             for (Key<UJO, ?> ujoProperty : orderBy) {
                 result.append(ujoProperty)
-                      .append(" ")
+                      .append(SPACE)
                       .append(ujoProperty.isAscending() ? "ASC" : "DESC")
                       .append(", ")
                       ;
